@@ -4,5 +4,7 @@ COPY . /app/
 RUN apt update; apt install gcc default-libmysqlclient-dev -y
 RUN pip install pipenv
 RUN pipenv install --skip-lock
+RUN pipenv run python3 manage.py makemigrations
+RUN pipenv run python3 manage.py migrate
 EXPOSE 8000
 CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
