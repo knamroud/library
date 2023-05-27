@@ -53,3 +53,21 @@ class MeView(APIView):
 
     def get(self, request, *args, **kwargs):
         return Response(serializers.UserSerializer(request.user).data, status.HTTP_200_OK)
+    
+    def delete(self, request, *args, **kwargs):
+        Token.objects.get(user=request.user).delete()
+        request.user.delete()
+        return Response(status=status.HTTP_200_OK)
+
+class ChangePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if user.check_password(request.data["old_password"]):
+            user.set_password(request.data["new_password"])
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
