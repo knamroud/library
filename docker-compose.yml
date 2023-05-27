@@ -24,18 +24,34 @@ services:
     build: ./api
     volumes:
       - ./api:/app
+      - ./init:/docker-entrypoint-initdb.d
     environment:
       DB_NAME: "${DB_NAME}"
       DB_USER: "${DB_USER}"
       DB_PASSWORD: "${DB_PASSWORD}"
       DB_HOST: "db"
       DB_PORT: "${DB_PORT}"
+      DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       SECRET_KEY: "${SECRET_KEY}"
+      PRODUCTION: "${PRODUCTION}"
     ports:
       - ${WEB_PORT}:8000
     depends_on:
       db:
         condition: service_healthy
         restart: true
+    command: bash scripts/run.sh
     links:
       - db
+    
+    frontend:
+      build: ./frontend
+
+    nginx:
+      image: nginx:alpine
+      volumes:
+        - ./nginx:/etc/nginx/conf.d
+      ports:
+        - "80:80"
+      depends_on:
+        - frontend
