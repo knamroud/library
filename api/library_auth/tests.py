@@ -98,6 +98,6 @@ class MeViewTestCase(APITestCase):
 
     def test_delete_me(self):
         response = self.client.delete("/auth/me")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 220)
         self.assertFalse(User.objects.filter(username=self.user.username).exists())
         self.assertFalse(Token.objects.filter(key=self.token).exists())
