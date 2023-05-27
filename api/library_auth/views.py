@@ -20,8 +20,9 @@ class RegisterView(generics.CreateAPIView):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             "token": token.key,
-            "nome": user.first_name,
-            "cognome": user.last_name,
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "email": user.email
         }, status.HTTP_201_CREATED, headers)
 
@@ -35,8 +36,9 @@ class LoginView(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             "token": token.key,
-            "nome": user.first_name,
-            "cognome": user.last_name,
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "email": user.email
         }, status.HTTP_202_ACCEPTED)
 
@@ -70,8 +72,9 @@ class MeView(APIView):
             serializer.save()
             return Response({
                 "token": Token.objects.get(user=user).key,
-                "nome": user.first_name,
-                "cognome": user.last_name,
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
                 "email": user.email
             }, status=status.HTTP_200_OK)
         else:
