@@ -18,4 +18,4 @@ jobs:
     - name: Run Tests
       working-directory: api
       run: |
-        python manage.py test
+        pipenv run python manage.py test
