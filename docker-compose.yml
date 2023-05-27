@@ -33,7 +33,7 @@ services:
       DB_PORT: "${DB_PORT}"
       DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       SECRET_KEY: "${SECRET_KEY}"
-      PRODUCTION: "${PRODUCTION}"
+      PRODUCTION: ${PRODUCTION}
     ports:
       - ${WEB_PORT}:8000
     depends_on:
@@ -45,7 +45,7 @@ services:
       - db
     
     frontend:
-      build: ./frontend
+      build: ./web
 
     nginx:
       image: nginx:alpine

@@ -19,3 +19,7 @@ jobs:
       working-directory: api
       run: |
         pipenv run python manage.py test
+    - name: Run Linting
+      working-directory: api
+      run: |
+        pipenv run autopep8 --in-place --recursive .

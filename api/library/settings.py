@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from os import environ
 from pathlib import Path
 from dotenv import load_dotenv
+from sys import argv
 
 if "SECRET_KEY" not in environ:
     load_dotenv()
@@ -74,29 +75,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "library.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+    } if "test" in argv else {
         'ENGINE': 'mysql.connector.django',
         'NAME': environ["DB_NAME"],
         'HOST': environ["DB_HOST"],
         'PORT': environ["DB_PORT"],
         'USER': environ["DB_USER"],
         'PASSWORD': environ["DB_PASSWORD"],
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
     } if environ["PRODUCTION"] else {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
