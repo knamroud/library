@@ -10,10 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v3
-    - name: Read .env contents
-      id: env
-      run: |
-        echo "::add-path::$(cat .env)"
     - name: Install Dependencies
       working-directory: api
       run: |
