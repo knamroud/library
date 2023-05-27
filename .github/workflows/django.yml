@@ -13,7 +13,7 @@ jobs:
     - name: Read .env contents
       id: env
       run: |
-        echo "::set-output name=env::$(cat .env)"
+        echo "::add-path::$(cat .env)"
     - name: Install Dependencies
       working-directory: api
       run: |
