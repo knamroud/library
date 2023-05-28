@@ -44,14 +44,14 @@ services:
     links:
       - db
     
-    frontend:
-      build: ./web
+    # frontend:
+    #   build: ./web
 
-    nginx:
-      image: nginx:alpine
-      volumes:
-        - ./nginx:/etc/nginx/conf.d
-      ports:
-        - "80:80"
-      depends_on:
-        - frontend
+    # nginx:
+    #   image: nginx:alpine
+    #   volumes:
+    #     - ./nginx:/etc/nginx/conf.d
+    #   ports:
+    #     - "80:80"
+    #   depends_on:
+    #     - frontend
