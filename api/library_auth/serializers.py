@@ -2,6 +2,27 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
+from django.utils.html import escape
+
+
+class UserSerializer(serializers.ModelSerializer):
+    is_librarian = serializers.SerializerMethodField(
+        "get_is_librarian", read_only=True)
+
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name",
+                  "username", "email", "is_librarian")
+
+    def get_is_librarian(self, obj):
+        return obj.groups.filter(name='Librarian').exists()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            if type(value) is str:
+                data[key] = escape(value)
+        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -37,9 +58,3 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("first_name", "last_name", "username", "email")

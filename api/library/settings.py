@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from sys import argv
 
 if "SECRET_KEY" not in environ:
-    load_dotenv()
+    load_dotenv() 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not bool(int(environ["PRODUCTION"]))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
+    "library_auth",
+    "library_api",
 ]
 
 MIDDLEWARE = [
@@ -89,7 +91,7 @@ DATABASES = {
         'PORT': environ["DB_PORT"],
         'USER': environ["DB_USER"],
         'PASSWORD': environ["DB_PASSWORD"],
-    } if environ["PRODUCTION"] else {
+    } if int(environ["PRODUCTION"]) else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

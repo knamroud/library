@@ -1,5 +1,5 @@
 from rest_framework.test import APITestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
 
 
@@ -15,8 +15,10 @@ class RegisterViewTestCase(APITestCase):
         }
         response = self.client.post("/auth/register", data)
         self.assertEqual(response.status_code, 201)
-        self.assertTrue(User.objects.filter(username=data["username"]).exists())
-    
+        self.assertTrue(User.objects.filter(
+            username=data["username"]).exists())
+
+
 class LoginViewTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -27,7 +29,7 @@ class LoginViewTestCase(APITestCase):
             password="testpassword"
         )
         self.user.save()
-    
+
     def test_login(self):
         data = {
             "username": "testuser",
@@ -36,7 +38,9 @@ class LoginViewTestCase(APITestCase):
         response = self.client.post("/auth/login", data)
         self.assertEqual(response.status_code, 202)
         token = response.data["token"]
-        self.assertTrue(Token.objects.filter(key=token, user=self.user).exists())
+        self.assertTrue(Token.objects.filter(
+            key=token, user=self.user).exists())
+
 
 class LogoutViewTestCase(APITestCase):
     def setUp(self):
@@ -50,12 +54,13 @@ class LogoutViewTestCase(APITestCase):
         self.user.save()
         self.token = Token.objects.create(user=self.user)
         self.token.save()
-        self.client.force_authenticate(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_logout(self):
         response = self.client.post("/auth/logout")
         self.assertEqual(response.status_code, 200)
         self.assertFalse(Token.objects.filter(key=self.token).exists())
+
 
 class MeViewTestCase(APITestCase):
     def setUp(self):
@@ -69,7 +74,7 @@ class MeViewTestCase(APITestCase):
         self.user.save()
         self.token = Token.objects.create(user=self.user)
         self.token.save()
-        self.client.force_authenticate(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_get_me(self):
         response = self.client.get("/auth/me")
@@ -78,7 +83,7 @@ class MeViewTestCase(APITestCase):
         self.assertEqual(response.data["first_name"], self.user.first_name)
         self.assertEqual(response.data["last_name"], self.user.last_name)
         self.assertEqual(response.data["email"], self.user.email)
-    
+
     def test_post_me(self):
         data = {
             "username": "testuser2",
@@ -86,9 +91,10 @@ class MeViewTestCase(APITestCase):
             "last_name": "user2",
             "email": "test@user2.com",
             "new_password": "testpassword2",
-            "old_password": "testpassword"
+            "password": "testpassword"
         }
         response = self.client.post("/auth/me", data)
+        self.user.refresh_from_db()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["username"], data["username"])
         self.assertEqual(response.data["first_name"], data["first_name"])
@@ -99,5 +105,30 @@ class MeViewTestCase(APITestCase):
     def test_delete_me(self):
         response = self.client.delete("/auth/me")
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(User.objects.filter(username=self.user.username).exists())
+        self.assertFalse(User.objects.filter(
+            username=self.user.username).exists())
         self.assertFalse(Token.objects.filter(key=self.token).exists())
+
+
+class IsLibrarianTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser",
+            first_name="test",
+            last_name="user",
+            email="test@user.com",
+            password="testpassword"
+        )
+        self.user.save()
+        self.token = Token.objects.create(user=self.user)
+        self.token.save()
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_is_librarian(self):
+        response = self.client.get("/auth/me")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.data["is_librarian"])
+        self.user.groups.add(Group.objects.get(name="Librarian"))
+        response = self.client.get("/auth/me")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_librarian"])
