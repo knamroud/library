@@ -44,17 +44,17 @@ class LoginViewTestCase(APITestCase):
 
 class LogoutViewTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
+        user = User.objects.create_user(
             username="testuser",
             first_name="test",
             last_name="user",
             email="test@user.com",
             password="testpassword"
         )
-        self.user.save()
-        self.token = Token.objects.create(user=self.user)
+        user.save()
+        self.token = Token.objects.create(user=user)
         self.token.save()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_logout(self):
         response = self.client.post("/auth/logout")
@@ -74,7 +74,7 @@ class MeViewTestCase(APITestCase):
         self.user.save()
         self.token = Token.objects.create(user=self.user)
         self.token.save()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_get_me(self):
         response = self.client.get("/auth/me")
@@ -96,10 +96,10 @@ class MeViewTestCase(APITestCase):
         response = self.client.post("/auth/me", data)
         self.user.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["username"], data["username"])
-        self.assertEqual(response.data["first_name"], data["first_name"])
-        self.assertEqual(response.data["last_name"], data["last_name"])
-        self.assertEqual(response.data["email"], data["email"])
+        self.assertEqual(self.user.username, data["username"])
+        self.assertEqual(self.user.first_name, data["first_name"])
+        self.assertEqual(self.user.last_name, data["last_name"])
+        self.assertEqual(self.user.email, data["email"])
         self.assertTrue(self.user.check_password(data["new_password"]))
 
     def test_delete_me(self):
@@ -112,23 +112,24 @@ class MeViewTestCase(APITestCase):
 
 class IsLibrarianTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser",
-            first_name="test",
-            last_name="user",
-            email="test@user.com",
-            password="testpassword"
-        )
-        self.user.save()
-        self.token = Token.objects.create(user=self.user)
-        self.token.save()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        user = User.objects.create_user(
+            username="testuser", password="testpassword")
+        user.save()
+        self.utoken = Token.objects.create(user=user)
+        self.utoken.save()
+        librarian = User.objects.create_user(
+            username="librarian", password="librarian")
+        librarian.groups.set([Group.objects.get(name="Librarian")])
+        librarian.save()
+        self.ltoken = Token.objects.create(user=librarian)
+        self.ltoken.save()
 
     def test_is_librarian(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.ltoken.key)
         response = self.client.get("/auth/me")
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.data["is_librarian"])
-        self.user.groups.add(Group.objects.get(name="Librarian"))
-        response = self.client.get("/auth/me")
-        self.assertEqual(response.status_code, 200)
         self.assertTrue(response.data["is_librarian"])
+
+    def test_is_not_librarian(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.utoken.key)
+        response = self.client.get("/auth/me")
+        self.assertFalse(response.data["is_librarian"])

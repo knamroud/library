@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from sys import argv
 
 if "SECRET_KEY" not in environ:
-    load_dotenv() 
+    load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,8 +82,8 @@ WSGI_APPLICATION = "library.wsgi.application"
 
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
     } if "test" in argv else {
         'ENGINE': 'mysql.connector.django',
         'NAME': environ["DB_NAME"],
@@ -145,6 +145,9 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_FILTER_BACKENDS": [
+        "rest_framework.filters.OrderingFilter",
+    ],
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",

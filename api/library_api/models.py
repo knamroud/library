@@ -15,6 +15,7 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
     isbn = models.CharField(max_length=200)
+    year = models.IntegerField()
 
     def __str__(self):
         return f"{self.title} - {self.author}"
