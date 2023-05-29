@@ -1,11 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from .models import Author, Book, Loan
 from . import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
-
-# write test cases for author view
 
 
 class AuthorViewTestCase(APITestCase):
@@ -29,8 +26,8 @@ class AuthorViewTestCase(APITestCase):
         author.save()
         response = self.client.get("/api/authors")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            serializers.AuthorSerializer(author).data, response.data["results"])
+        self.assertEqual(
+            [serializers.AuthorSerializer(author).data], response.data["results"])
 
     def test_unauthorized_author_create(self):
         data = {"first_name": "test",
