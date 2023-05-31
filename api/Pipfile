@@ -8,6 +8,7 @@ djangorestframework = "*"
 mysql-connector-python = "*"
 autopep8 = "*"
 python-dotenv = "*"
+pillow = "*"
 
 [dev-packages]
 
