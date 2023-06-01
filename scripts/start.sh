@@ -1,7 +1,5 @@
 #!/bin/bash
 source .env
-# if production is passed in script call, use that value, otherwise keep .env value
-# check if $1 exists
 if ! [ -z "$1" ]; then
     PRODUCTION=$1
 fi
