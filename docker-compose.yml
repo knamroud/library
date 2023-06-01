@@ -15,10 +15,19 @@ services:
       - ${DB_PORT}:3306
     command: --bind-address=db
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pexample"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-pexample"
+        ]
       interval: 5s
       retries: 10
-
 
   backend:
     build: ./api
@@ -43,15 +52,3 @@ services:
     command: bash scripts/run.sh
     links:
       - db
-    
-    # frontend:
-    #   build: ./web
-
-    # nginx:
-    #   image: nginx:alpine
-    #   volumes:
-    #     - ./nginx:/etc/nginx/conf.d
-    #   ports:
-    #     - "80:80"
-    #   depends_on:
-    #     - frontend
