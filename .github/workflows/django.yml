@@ -22,3 +22,5 @@ jobs:
       working-directory: web
       run: |
         pipenv run autopep8 --in-place --recursive .
+        pipenv run djlint --reformat .
+        pipenv run djlint -e css --reformat . 

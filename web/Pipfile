@@ -9,6 +9,7 @@ mysql-connector-python = "*"
 autopep8 = "*"
 python-dotenv = "*"
 pillow = "*"
+djlint = "*"
 
 [dev-packages]
 

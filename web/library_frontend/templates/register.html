@@ -1,132 +1,99 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="{{url_for('static', filename='/css/register.css')}}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        h3 {
-            text-align: center;
-            color: #666;
-        }
-
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        fieldset {
-            border: none;
-            padding: 0;
-            margin: 0 0 20px;
-        }
-
-        legend {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="tel"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        input[type="submit"],
-        input[type="reset"] {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover,
-        input[type="reset"]:hover {
-            background-color: #555;
-        }
-
-        #errorlist {
-            color: red;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Registrazione Biblioteca</h1>
-    <h3>Compila il form per la registrazione.</h3>
-    <form method="POST" action="/register">
-        <fieldset>
-            <legend>Credenziali</legend>
-             <p>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" placeholder="Inserisci lo username..." minlength="3" maxlength="10" pattern="^[A-Za-z]+$" required>
-                <span id="errusername"></span>
-            </p>
+    <head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    </head>
+    <body>
+        <h1>Registrazione Biblioteca</h1>
+        <h3>Compila il form per la registrazione.</h3>
+        <form method="POST" action="/register">
+            <fieldset>
+                <legend>Credenziali</legend>
+                <p>
+                    <label for="username">Username:</label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           placeholder="Inserisci lo username..."
+                           minlength="3"
+                           maxlength="10"
+                           pattern="^[A-Za-z]+$"
+                           required>
+                    <span id="errusername"></span>
+                </p>
+                <p>
+                    <label for="email">Email:</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="Inserisci l'email..."
+                           required>
+                    <span id="erremail"></span>
+                </p>
+                <p>
+                    <label for="password">Password:</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Inserisci la password..."
+                           minlength="8"
+                           required>
+                    <span id="errpassword"></span>
+                </p>
+                <p>
+                    <label for="cpassword">Conferma password:</label>
+                    <input type="password"
+                           id="cpassword"
+                           name="cpassword"
+                           placeholder="Conferma la password..."
+                           minlength="8"
+                           required>
+                    <span id="errcpassword"></span>
+                </p>
+            </fieldset>
+            <fieldset>
+                <legend>Dati cliente</legend>
+                <p>
+                    <label for="nome">Nome:</label>
+                    <input type="text"
+                           id="nome"
+                           name="nome"
+                           placeholder="Inserisci il nome..."
+                           minlength="3"
+                           maxlength="10"
+                           pattern="^[A-Za-z]+$"
+                           required>
+                    <span id="errnome"></span>
+                </p>
+                <p>
+                    <label for="cognome">Cognome:</label>
+                    <input type="text"
+                           id="cognome"
+                           name="cognome"
+                           placeholder="Inserisci il cognome..."
+                           minlength="3"
+                           maxlength="10"
+                           pattern="^[A-Za-z]+$"
+                           required>
+                    <span id="errcognome"></span>
+                </p>
+                <p>
+                    <label for="numero">Numero di telefono:</label>
+                    <input type="tel"
+                           id="numero"
+                           name="numero"
+                           placeholder="Inserisci il numero di telefono..."
+                           required>
+                    <span id="errnumero"></span>
+                </p>
+            </fieldset>
+            <ul id="errorlist">
+            </ul>
             <p>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Inserisci l'email..." required>
-                <span id="erremail"></span>
+                <input type="submit" value="Registrati">
+                <input type="reset" value="Annulla">
             </p>
-            <p>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Inserisci la password..." minlength="8" required>
-                <span id="errpassword"></span>
-            </p>
-            <p>
-                <label for="cpassword">Conferma password:</label>
-                <input type="password" id="cpassword" name="cpassword" placeholder="Conferma la password..." minlength="8" required>
-                <span id="errcpassword"></span>
-            </p>
-        </fieldset>
-        <fieldset>
-            <legend>Dati cliente</legend>
-            <p>
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" placeholder="Inserisci il nome..." minlength="3" maxlength="10" pattern="^[A-Za-z]+$" required>
-                <span id="errnome"></span>
-            </p>
-            <p>
-                <label for="cognome">Cognome:</label>
-                <input type="text" id="cognome" name="cognome" placeholder="Inserisci il cognome..." minlength="3" maxlength="10" pattern="^[A-Za-z]+$" required>
-                <span id="errcognome"></span>
-            </p>
-            <p>
-                <label for="numero">Numero di telefono:</label>
-                <input type="tel" id="numero" name="numero" placeholder="Inserisci il numero di telefono..." required>
-                <span id="errnumero"></span>
-            </p>
-        </fieldset>
-        <ul id="errorlist"></ul>
-        <p>
-            <input type="submit" value="Registrati">
-            <input type="reset" value="Annulla">
-        </p>
-    </form>
-</body>
+        </form>
+    </body>
 </html>

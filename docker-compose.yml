@@ -29,10 +29,10 @@ services:
       interval: 5s
       retries: 10
 
-  backend:
-    build: ./api
+  web:
+    build: ./web
     volumes:
-      - ./api:/app
+      - ./web:/app
       - ./init:/docker-entrypoint-initdb.d
     environment:
       DB_NAME: "${DB_NAME}"
