@@ -13,7 +13,7 @@ class RegisterViewTestCase(APITestCase):
             "password": "testpassword",
             "cpassword": "testpassword"
         }
-        response = self.client.post("/auth/register", data)
+        response = self.client.post("/api/auth/register", data)
         self.assertEqual(response.status_code, 201)
         self.assertTrue(User.objects.filter(
             username=data["username"]).exists())
@@ -35,7 +35,7 @@ class LoginViewTestCase(APITestCase):
             "username": "testuser",
             "password": "testpassword"
         }
-        response = self.client.post("/auth/login", data)
+        response = self.client.post("/api/auth/login", data)
         self.assertEqual(response.status_code, 202)
         token = response.data["token"]
         self.assertTrue(Token.objects.filter(
@@ -57,7 +57,7 @@ class LogoutViewTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_logout(self):
-        response = self.client.post("/auth/logout")
+        response = self.client.post("/api/auth/logout")
         self.assertEqual(response.status_code, 200)
         self.assertFalse(Token.objects.filter(key=self.token).exists())
 
@@ -77,7 +77,7 @@ class MeViewTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_get_me(self):
-        response = self.client.get("/auth/me")
+        response = self.client.get("/api/auth/me")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["username"], self.user.username)
         self.assertEqual(response.data["first_name"], self.user.first_name)
@@ -93,7 +93,7 @@ class MeViewTestCase(APITestCase):
             "new_password": "testpassword2",
             "password": "testpassword"
         }
-        response = self.client.post("/auth/me", data)
+        response = self.client.post("/api/auth/me", data)
         self.user.refresh_from_db()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.username, data["username"])
@@ -103,7 +103,7 @@ class MeViewTestCase(APITestCase):
         self.assertTrue(self.user.check_password(data["new_password"]))
 
     def test_delete_me(self):
-        response = self.client.delete("/auth/me")
+        response = self.client.delete("/api/auth/me")
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(
             username=self.user.username).exists())
@@ -126,10 +126,10 @@ class IsLibrarianTestCase(APITestCase):
 
     def test_is_librarian(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.ltoken.key)
-        response = self.client.get("/auth/me")
+        response = self.client.get("/api/auth/me")
         self.assertTrue(response.data["is_librarian"])
 
     def test_is_not_librarian(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.utoken.key)
-        response = self.client.get("/auth/me")
+        response = self.client.get("/api/auth/me")
         self.assertFalse(response.data["is_librarian"])
