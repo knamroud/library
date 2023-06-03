@@ -1,4 +1,5 @@
 # Library
+# NOT DONE YET
 School final project  
 Frontend and design: [nicovuka](https://github.com/nicovuka), [curryx04](https://github.com/curryx04)  
 Backend and project architecture: [knamroud](https://github.com/knamroud)  
