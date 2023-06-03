@@ -26,12 +26,13 @@ def main():
         from library_frontend.tsccthread import TSCCThread
         from django.conf import settings
         from os.path import join
-        tscc = TSCCThread(join(settings.STATIC_ROOT, "ts"), join(
-            settings.STATIC_ROOT, "js"), debug=settings.DEBUG)
-        tscc.start()
+        #tscc = TSCCThread(join(settings.STATIC_ROOT, "ts"), join(
+        #    settings.STATIC_ROOT, "js"), debug=settings.DEBUG)
+        #tscc.start()
         execute_from_command_line(sys.argv)
     finally:
-        tscc.stop()
+        #tscc.stop()
+        pass
 
 
 if __name__ == "__main__":
