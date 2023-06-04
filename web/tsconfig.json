@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./library_frontend/static/js",
+        "target": "es5",
+        "sourceMap": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+        "./library_frontend/static/ts/*"
+    ]
+}

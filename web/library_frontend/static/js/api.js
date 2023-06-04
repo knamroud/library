@@ -1,4 +1,6 @@
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Requests = void 0;
 var Requests = /** @class */ (function () {
     function Requests() {
         this.base_url = "";
@@ -69,7 +71,6 @@ var Requests = /** @class */ (function () {
         return results;
     };
     Requests.prototype.logout = function () {
-        var results = { "ok": false, "data": "" };
         fetch(this.base_url + "/auth/logout", {
             method: "POST",
             headers: {
@@ -78,18 +79,11 @@ var Requests = /** @class */ (function () {
             },
             redirect: "follow"
         }).then(function (response) {
-            if (response.status == 200) {
-                results.ok = true;
-                localStorage.removeItem("token");
-                window.location.href = "/login";
-            }
-            else {
-                response.json().then(function (data) {
-                    results.ok = false;
-                    results.data = data.message;
-                });
-            }
+            localStorage.removeItem("token");
+            window.location.href = "/login";
         });
     };
     return Requests;
 }());
+exports.Requests = Requests;
+//# sourceMappingURL=api.js.map

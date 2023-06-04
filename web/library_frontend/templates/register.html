@@ -9,7 +9,7 @@
     <body>
         <h1>Registrazione Biblioteca</h1>
         <h3>Compila il form per la registrazione.</h3>
-        <form method="POST" action="/register">
+        <form method="POST">
             <fieldset>
                 <legend>Credenziali</legend>
                 <p>
@@ -44,9 +44,9 @@
                     <span id="errpassword"></span>
                 </p>
                 <p>
-                    <label for="cpassword">Conferma password:</label>
+                    <label for="password_confirm">Conferma password:</label>
                     <input type="password"
-                           id="cpassword"
+                           id="password_confirm"
                            name="cpassword"
                            placeholder="Conferma la password..."
                            minlength="8"
@@ -57,9 +57,9 @@
             <fieldset>
                 <legend>Dati cliente</legend>
                 <p>
-                    <label for="nome">Nome:</label>
+                    <label for="first_name">Nome:</label>
                     <input type="text"
-                           id="nome"
+                           id="first_name"
                            name="nome"
                            placeholder="Inserisci il nome..."
                            minlength="3"
@@ -69,9 +69,9 @@
                     <span id="errnome"></span>
                 </p>
                 <p>
-                    <label for="cognome">Cognome:</label>
+                    <label for="last_name">Cognome:</label>
                     <input type="text"
-                           id="cognome"
+                           id="last_name"
                            name="cognome"
                            placeholder="Inserisci il cognome..."
                            minlength="3"
@@ -81,9 +81,9 @@
                     <span id="errcognome"></span>
                 </p>
                 <p>
-                    <label for="numero">Numero di telefono:</label>
+                    <label for="phone">Numero di telefono:</label>
                     <input type="tel"
-                           id="numero"
+                           id="phone"
                            name="numero"
                            placeholder="Inserisci il numero di telefono..."
                            required>

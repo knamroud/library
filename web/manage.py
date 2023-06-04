@@ -6,7 +6,6 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # use different settings file for production, development, and testing
     if "DJANGO_SETTINGS_MODULE" not in os.environ:
         if len(sys.argv) > 1 and sys.argv[1] == "test":
             os.environ.setdefault("DJANGO_SETTINGS_MODULE",
@@ -25,17 +24,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    try:
-        from library_frontend.tsccthread import TSCCThread
-        from django.conf import settings
-        from os.path import join
-        # tscc = TSCCThread(join(settings.STATIC_ROOT, "ts"), join(
-        #    settings.STATIC_ROOT, "js"), debug=settings.DEBUG)
-        # tscc.start()
-        execute_from_command_line(sys.argv)
-    finally:
-        # tscc.stop()
-        pass
+    execute_from_command_line(sys.argv)
 
 
 if __name__ == "__main__":

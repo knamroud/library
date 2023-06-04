@@ -1,12 +1,10 @@
-// create a class to handle the api calls to the backend (library_auth and library_api)
-// create a class to handle the api calls to the backend (library_auth and library_api)
+export { Requests };
 class Requests {
     base_url = "";
     constructor() {
         this.base_url = "http://" + window.location.host + "/api";
     }
 
-    // create a function to handle authentication requests (login, register, logout)
     register(username: string, password: string, email: string, first_name: string, last_name: string, phone: string) {
         let data = {
             "username": username,
@@ -75,8 +73,6 @@ class Requests {
     }
 
     logout() {
-        // send a request to the logout endpoint and remove the token from local storage
-        let results = { "ok": false, "data": "" };
         fetch(this.base_url + "/auth/logout", {
             method: "POST",
             headers: {

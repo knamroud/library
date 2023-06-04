@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("library_auth.urls")),
     path("api/", include("library_api.urls")),
+    path("", include("library_frontend.urls")),
 ]
